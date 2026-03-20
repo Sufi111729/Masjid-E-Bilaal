@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Masjid-E-Bilaal | Admin Dashboard</title>
   <meta name="description" content="Protected admin dashboard for Masjid-E-Bilaal prayer timings and announcements management.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="https://masjid-e-bilaal.vercel.app/admin.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -15,20 +17,25 @@
     <header class="site-header">
       <div class="container nav-wrap">
         <a class="brand" href="index.html">
-          <span class="brand-mark">MB</span>
-          <div>
+          <span class="brand-mark" aria-hidden="true">MB</span>
+          <div class="brand-copy">
             <strong>Masjid-E-Bilaal</strong>
-            <span>Admin Dashboard</span>
+            <span>Kundwa (urf Dilipnagar)</span>
           </div>
         </a>
         <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
-        <nav class="site-nav">
-          <a href="index.html">Public Site</a>
-          <a href="jobs.html">Jobs</a>
-          <a href="admin.html" class="active">Admin Panel</a>
-        </nav>
+        <div class="nav-panel">
+          <nav class="site-nav">
+            <a href="index.html">Public Site</a>
+            <a href="jobs.html">Jobs</a>
+            <a href="admin.html" class="active">Admin Panel</a>
+          </nav>
+          <div class="nav-actions">
+            <a href="https://chat.whatsapp.com/EXAMPLEMASJIDBILAALGROUP" target="_blank" rel="noopener" class="nav-cta nav-cta-secondary">WhatsApp Group</a>
+          </div>
+        </div>
         <button type="button" class="btn btn-outline header-logout" id="header-logout-button" hidden>Logout</button>
       </div>
     </header>
@@ -47,15 +54,15 @@
           <section class="content-card reveal auth-panel" id="auth-panel">
             <span class="eyebrow">Admin Login</span>
             <h2>Authorized access only</h2>
-            <form id="login-form" class="styled-form" novalidate>
+            <form id="login-form" class="styled-form" novalidate autocomplete="off">
               <div class="form-grid">
                 <label>
                   <span>Email</span>
-                  <input type="email" name="email" value="admin@masjidebilaal.com" placeholder="admin@masjidebilaal.com" required>
+                  <input type="email" name="email" placeholder="admin@masjidebilaal.com" autocomplete="off" required>
                 </label>
                 <label>
                   <span>Password</span>
-                  <input type="password" name="password" value="Masjid123!" placeholder="Masjid123!" required>
+                  <input type="password" name="password" placeholder="Enter password" autocomplete="new-password" required>
                 </label>
               </div>
               <button type="submit" class="btn btn-primary">Login to Dashboard</button>
@@ -154,6 +161,7 @@
                 </div>
               </div>
             </section>
+
           </section>
         </div>
       </section>

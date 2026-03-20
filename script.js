@@ -30,6 +30,7 @@ const DEMO_PRAYER_KEY = "masjid-e-bilaal-demo-prayers";
 const DEMO_ANNOUNCEMENT_KEY = "masjid-e-bilaal-demo-announcements";
 const JOBS_STORAGE_KEY = "masjid-e-bilaal-jobs";
 const APP_TIMEZONE = "Asia/Kolkata";
+const ANNOUNCEMENT_POPUP_KEY = "masjid-e-bilaal-announcement-popup-dismissed";
 
 const defaultPrayerTimings = {
   fajr: "5:30 AM",
@@ -77,21 +78,45 @@ const defaultJobs = [
 ];
 
 function setupNav() {
+  const siteHeader = document.querySelector(".site-header");
   const navToggle = document.querySelector(".nav-toggle");
   const siteNav = document.querySelector(".site-nav");
-  if (!navToggle || !siteNav) return;
+  const navPanel = document.querySelector(".nav-panel");
+  if (!navToggle || !siteNav || !navPanel) return;
+
+  const closeNav = () => {
+    siteNav.classList.remove("open");
+    navPanel.classList.remove("open");
+    navToggle.setAttribute("aria-expanded", "false");
+  };
 
   navToggle.addEventListener("click", () => {
     const isOpen = siteNav.classList.toggle("open");
+    navPanel.classList.toggle("open", isOpen);
     navToggle.setAttribute("aria-expanded", String(isOpen));
   });
 
   siteNav.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      siteNav.classList.remove("open");
-      navToggle.setAttribute("aria-expanded", "false");
-    });
+    link.addEventListener("click", closeNav);
   });
+
+  document.addEventListener("click", (event) => {
+    if (!navPanel.classList.contains("open")) return;
+    if (siteHeader?.contains(event.target)) return;
+    closeNav();
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 1080) closeNav();
+  });
+
+  const syncHeaderScrollState = () => {
+    if (!siteHeader) return;
+    siteHeader.classList.toggle("is-scrolled", window.scrollY > 18);
+  };
+
+  syncHeaderScrollState();
+  window.addEventListener("scroll", syncHeaderScrollState, { passive: true });
 }
 
 function setupRevealAnimations() {
@@ -168,6 +193,65 @@ function getCurrentTimePartsInTimezone(timeZone = APP_TIMEZONE) {
   };
 }
 
+function setupHijriEidStatus() {
+  const hijriDateElement = document.getElementById("hero-hijri-date");
+  const eidStatusElement = document.getElementById("hero-eid-status");
+  const eidStatusBox = document.getElementById("hero-eid-status-box");
+  const eidBanner = document.getElementById("eid-banner");
+  const eidBannerText = document.getElementById("eid-banner-text");
+  if (!hijriDateElement || !eidStatusElement) return;
+
+  try {
+    const adjustedNow = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const hijriDisplayFormatter = new Intl.DateTimeFormat("en-IN-u-ca-islamic", {
+      timeZone: APP_TIMEZONE,
+      day: "numeric",
+      month: "long"
+    });
+    const hijriDetectFormatter = new Intl.DateTimeFormat("en-IN-u-ca-islamic", {
+      timeZone: APP_TIMEZONE,
+      day: "numeric",
+      month: "numeric",
+      year: "numeric"
+    });
+
+    const detectParts = hijriDetectFormatter.formatToParts(adjustedNow);
+    const day = Number(detectParts.find((part) => part.type === "day")?.value || 0);
+    const month = Number(detectParts.find((part) => part.type === "month")?.value || 0);
+    const year = detectParts.find((part) => part.type === "year")?.value || "";
+
+    hijriDateElement.textContent = hijriDisplayFormatter.format(adjustedNow);
+
+    const isEidAlFitr = day === 1 && month === 10;
+    const isEidAlAdha = day === 10 && month === 12;
+
+    if (isEidAlFitr) {
+      if (eidStatusBox) eidStatusBox.hidden = false;
+      eidStatusElement.textContent = `Today is Eid-ul-Fitr ${year}`;
+      if (eidBanner) eidBanner.hidden = false;
+      if (eidBannerText) eidBannerText.textContent = "Eid-ul-Fitr Mubarak from Masjid-E-Bilaal Kundwa (urf Dilipnagar)";
+      return;
+    }
+
+    if (isEidAlAdha) {
+      if (eidStatusBox) eidStatusBox.hidden = false;
+      eidStatusElement.textContent = `Today is Eid-ul-Adha ${year}`;
+      if (eidBanner) eidBanner.hidden = false;
+      if (eidBannerText) eidBannerText.textContent = "Eid-ul-Adha Mubarak from Masjid-E-Bilaal Kundwa (urf Dilipnagar)";
+      return;
+    }
+
+    if (eidStatusBox) eidStatusBox.hidden = true;
+    if (eidBanner) eidBanner.hidden = true;
+    eidStatusElement.textContent = "No Eid today";
+  } catch (error) {
+    if (eidStatusBox) eidStatusBox.hidden = true;
+    if (eidBanner) eidBanner.hidden = true;
+    hijriDateElement.textContent = "Hijri date unavailable";
+    eidStatusElement.textContent = "Eid status unavailable";
+  }
+}
+
 function formatAnnouncementDate(timestamp) {
   const dateValue = typeof timestamp?.toDate === "function"
     ? timestamp.toDate()
@@ -184,6 +268,60 @@ function formatAnnouncementDate(timestamp) {
     hour: "2-digit",
     minute: "2-digit"
   });
+}
+
+function getAnnouncementIdentity(item) {
+  if (!item) return "";
+  if (item.id) return String(item.id);
+  const title = item.title || "announcement";
+  const createdAt = typeof item.createdAt?.toDate === "function"
+    ? item.createdAt.toDate().getTime()
+    : typeof item.createdAt === "number"
+      ? item.createdAt
+      : "unknown";
+  return `${title}-${createdAt}`;
+}
+
+function setupAnnouncementPopup() {
+  const popup = document.getElementById("announcement-popup");
+  if (!popup) return null;
+
+  const title = document.getElementById("announcement-popup-title");
+  const description = document.getElementById("announcement-popup-description");
+  const date = document.getElementById("announcement-popup-date");
+  const closeButton = document.getElementById("announcement-popup-close");
+  const dismissButton = document.getElementById("announcement-popup-dismiss");
+  const backdrop = document.getElementById("announcement-popup-backdrop");
+
+  const closePopup = () => {
+    popup.hidden = true;
+  };
+
+  const dismissPopup = () => {
+    const announcementId = popup.dataset.announcementId || "";
+    if (announcementId) localStorage.setItem(ANNOUNCEMENT_POPUP_KEY, announcementId);
+    closePopup();
+  };
+
+  closeButton?.addEventListener("click", closePopup);
+  dismissButton?.addEventListener("click", dismissPopup);
+  backdrop?.addEventListener("click", closePopup);
+
+  return {
+    show(item) {
+      const identity = getAnnouncementIdentity(item);
+      if (!identity || localStorage.getItem(ANNOUNCEMENT_POPUP_KEY) === identity) {
+        popup.hidden = true;
+        return;
+      }
+
+      popup.dataset.announcementId = identity;
+      date.textContent = formatAnnouncementDate(item.createdAt);
+      title.textContent = item.title || "Latest announcement";
+      description.textContent = item.description || "";
+      popup.hidden = false;
+    }
+  };
 }
 
 function getDemoSession() {
@@ -359,6 +497,29 @@ function setupPublicPage() {
   const prayerLoader = document.getElementById("prayer-loader");
   const announcementList = document.getElementById("announcement-list");
   const announcementLoader = document.getElementById("announcement-loader");
+  const announcementPopup = setupAnnouncementPopup();
+
+  const renderAnnouncementItems = (items) => {
+    if (!items.length) {
+      announcementList.innerHTML = `
+        <div class="empty-state">
+          <h3>No announcements available</h3>
+          <p>New updates from Masjid-E-Bilaal will appear here once published.</p>
+        </div>
+      `;
+      return;
+    }
+
+    announcementList.innerHTML = items.map((item, index) => `
+      <article class="announcement-card reveal ${index % 3 === 1 ? "delay-1" : index % 3 === 2 ? "delay-2" : ""} visible">
+        <span class="announcement-date">${escapeHtml(formatAnnouncementDate(item.createdAt))}</span>
+        <h3>${escapeHtml(item.title || "Untitled announcement")}</h3>
+        <p>${escapeHtml(item.description || "")}</p>
+      </article>
+    `).join("");
+
+    announcementPopup?.show(items[0]);
+  };
 
   toggleLoader(prayerLoader, true);
   toggleLoader(announcementLoader, true);
@@ -373,20 +534,7 @@ function setupPublicPage() {
 
       const announcements = getDemoAnnouncements().sort((a, b) => b.createdAt - a.createdAt);
       toggleLoader(announcementLoader, false);
-      announcementList.innerHTML = announcements.length
-        ? announcements.map((item, index) => `
-            <article class="announcement-card reveal ${index % 3 === 1 ? "delay-1" : index % 3 === 2 ? "delay-2" : ""} visible">
-              <span class="announcement-date">${escapeHtml(formatAnnouncementDate(item.createdAt))}</span>
-              <h3>${escapeHtml(item.title || "Untitled announcement")}</h3>
-              <p>${escapeHtml(item.description || "")}</p>
-            </article>
-          `).join("")
-        : `
-          <div class="empty-state">
-            <h3>No announcements available</h3>
-            <p>New updates from Masjid-E-Bilaal will appear here once published.</p>
-          </div>
-        `;
+      renderAnnouncementItems(announcements);
     };
 
     renderDemoPublicData();
@@ -434,29 +582,27 @@ function setupPublicPage() {
 
   onSnapshot(announcementsQuery, (snapshot) => {
     toggleLoader(announcementLoader, false);
+    const demoAnnouncements = getDemoAnnouncements().sort((a, b) => b.createdAt - a.createdAt);
 
     if (snapshot.empty) {
-      announcementList.innerHTML = `
-        <div class="empty-state">
-          <h3>No announcements available</h3>
-          <p>New updates from Masjid-E-Bilaal will appear here once published.</p>
-        </div>
-      `;
+      renderAnnouncementItems(demoAnnouncements);
       return;
     }
 
-    announcementList.innerHTML = snapshot.docs.map((docSnapshot, index) => {
-      const item = docSnapshot.data();
-      return `
-        <article class="announcement-card reveal ${index % 3 === 1 ? "delay-1" : index % 3 === 2 ? "delay-2" : ""} visible">
-          <span class="announcement-date">${escapeHtml(formatAnnouncementDate(item.createdAt))}</span>
-          <h3>${escapeHtml(item.title || "Untitled announcement")}</h3>
-          <p>${escapeHtml(item.description || "")}</p>
-        </article>
-      `;
-    }).join("");
+    const items = snapshot.docs.map((docSnapshot) => ({
+      id: docSnapshot.id,
+      ...docSnapshot.data()
+    }));
+
+    renderAnnouncementItems(items);
   }, () => {
     toggleLoader(announcementLoader, false);
+    const demoAnnouncements = getDemoAnnouncements().sort((a, b) => b.createdAt - a.createdAt);
+    if (demoAnnouncements.length) {
+      renderAnnouncementItems(demoAnnouncements);
+      return;
+    }
+
     announcementList.innerHTML = `
       <div class="empty-state">
         <h3>Unable to load announcements</h3>
@@ -708,6 +854,7 @@ function setupAdminPage() {
         adminUserEmail.textContent = `Signed in user: ${DEMO_EMAIL} (demo mode)`;
         await hydratePrayerFormFromSource();
         renderDemoAdminAnnouncements();
+        renderDemoJobs();
       } else {
         setFeedback(loginFeedback, "Use the default demo credentials shown in the form.", "error");
       }
@@ -728,6 +875,7 @@ function setupAdminPage() {
         adminUserEmail.textContent = `Signed in user: ${DEMO_EMAIL} (demo mode)`;
         await hydratePrayerFormFromSource();
         renderDemoAdminAnnouncements();
+        renderDemoJobs();
       } else {
         setFeedback(loginFeedback, error.message, "error");
       }
@@ -964,6 +1112,7 @@ function setupAdminPage() {
     if (getDemoSession()) {
       adminUserEmail.textContent = `Signed in user: ${DEMO_EMAIL} (demo mode)`;
       hydratePrayerFormFromSource();
+      hydrateHijriOverrideForm();
       renderDemoAdminAnnouncements();
       renderDemoJobs();
     }
@@ -1106,6 +1255,7 @@ function setupAdminPage() {
     if (!isLoggedIn) {
       adminUserEmail.textContent = "Signed in user: --";
       resetAnnouncementForm();
+      resetAdminJobForm();
       return;
     }
 
@@ -1166,6 +1316,7 @@ function setupAdminPage() {
 setupNav();
 setupRevealAnimations();
 setupHeroClock();
+setupHijriEidStatus();
 setupPublicPage();
 setupAdminPage();
 setupJobsPage();

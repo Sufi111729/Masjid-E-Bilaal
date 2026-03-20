@@ -3,35 +3,81 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Masjid-E-Bilaal | Prayer Timings & Announcements</title>
-  <meta name="description" content="Masjid-E-Bilaal public website with live prayer timings and community announcements powered by Firebase.">
+  <title>Masjid-E-Bilaal Kundwa | Namaz Timings</title>
+  <meta name="description" content="Masjid-E-Bilaal Kundwa (urf Dilipnagar): namaz timings, Jumma Namaz, announcements, jobs, and community updates for local worshippers.">
+  <meta name="keywords" content="masjid-e-bilaal kundwa dilipnagar, masjid kundwa urf dilipnagar, bilal masjid kundwa, masjid near kundwa dilipnagar, namaz timing kundwa dilipnagar, jumma namaz kundwa, masjid announcement kundwa, mosque in kundwa dilipnagar">
+  <link rel="canonical" href="https://masjid-e-bilaal.vercel.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Masjid-E-Bilaal Kundwa (urf Dilipnagar)">
+  <meta property="og:description" content="Namaz timings, Jumma Namaz, announcements, jobs, and community updates for Kundwa (urf Dilipnagar).">
+  <meta property="og:url" content="https://masjid-e-bilaal.vercel.app/">
+  <meta property="og:site_name" content="Masjid-E-Bilaal">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "PlaceOfWorship",
+      "name": "Masjid-E-Bilaal Kundwa (urf Dilipnagar)",
+      "alternateName": [
+        "Masjid-E-Bilaal",
+        "Bilal Masjid",
+        "Masjid-E-Bilaal urf Bilal Masjid"
+      ],
+      "url": "https://masjid-e-bilaal.vercel.app/",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Kundwa (urf Dilipnagar)",
+        "addressCountry": "IN"
+      },
+      "areaServed": "Kundwa (urf Dilipnagar), India"
+    }
+  </script>
 </head>
 <body data-page="public">
   <div class="site-shell">
+    <div class="announcement-popup" id="announcement-popup" hidden>
+      <div class="announcement-popup-backdrop" id="announcement-popup-backdrop"></div>
+      <div class="announcement-popup-card" role="dialog" aria-modal="true" aria-labelledby="announcement-popup-title">
+        <button type="button" class="announcement-popup-close" id="announcement-popup-close" aria-label="Close announcement popup">×</button>
+        <span class="eyebrow">Latest Announcement</span>
+        <p class="announcement-popup-date" id="announcement-popup-date">--</p>
+        <h2 id="announcement-popup-title">Loading announcement...</h2>
+        <p id="announcement-popup-description">Please wait while the latest announcement is loaded.</p>
+        <div class="announcement-popup-actions">
+          <button type="button" class="btn btn-outline" id="announcement-popup-dismiss">Close</button>
+        </div>
+      </div>
+    </div>
+
     <header class="site-header">
       <div class="container nav-wrap">
         <a class="brand" href="index.html">
-          <span class="brand-mark">MB</span>
-          <div>
+          <span class="brand-mark" aria-hidden="true">MB</span>
+          <div class="brand-copy">
             <strong>Masjid-E-Bilaal</strong>
-            <span>Prayer, Peace, Community</span>
+            <span>Kundwa (urf Dilipnagar)</span>
           </div>
         </a>
         <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
-        <nav class="site-nav">
-          <a href="#hero" class="active">Home</a>
-          <a href="#prayer-timings">Prayer Timings</a>
-          <a href="#announcements">Announcements</a>
-          <a href="jobs.html">Jobs</a>
-          <a href="#services">Services</a>
-          <a href="admin.html" class="nav-admin-link">Admin</a>
-        </nav>
+        <div class="nav-panel">
+          <nav class="site-nav">
+            <a href="#hero" class="active">Home</a>
+            <a href="#prayer-timings">Prayer Timings</a>
+            <a href="#announcements">Announcements</a>
+            <a href="jobs.html">Jobs</a>
+            <a href="#services">Services</a>
+            <a href="https://chat.whatsapp.com/EXAMPLEMASJIDBILAALGROUP" target="_blank" rel="noopener">WhatsApp Group</a>
+          </nav>
+          <div class="nav-actions">
+            <a href="admin.html" class="nav-cta">Admin Panel</a>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -39,11 +85,15 @@
       <section class="hero-section" id="hero">
         <div class="container hero-grid">
           <div class="hero-copy reveal">
+            <div class="eid-banner" id="eid-banner" hidden>
+              <span class="eid-banner-label">Eid Mubarak</span>
+              <strong id="eid-banner-text">Today is a blessed Eid at Masjid-E-Bilaal.</strong>
+            </div>
             <span class="eyebrow">Masjid-E-Bilaal</span>
-            <h1>A place of prayer, peace, community, and service</h1>
+            <h1>Masjid-E-Bilaal Kundwa (urf Dilipnagar)</h1>
             <p>
-              View live prayer timings and the latest mosque announcements, updated
-              directly by the Masjid-E-Bilaal administration through a secure Firebase dashboard.
+              View namaz timings, Jumma Namaz updates, mosque announcements, jobs,
+              and community information for Masjid-E-Bilaal in Kundwa, also known as Dilipnagar.
             </p>
             <div class="hero-actions">
               <a class="btn btn-primary" href="#prayer-timings">View Timings</a>
@@ -84,6 +134,16 @@
                   <strong id="hero-next-prayer">--</strong>
                 </div>
               </div>
+              <div class="hero-status-strip hero-status-strip-eid">
+                <div class="hero-status-box hero-eid-box">
+                  <span>Hijri Calendar</span>
+                  <strong id="hero-hijri-date">Loading Hijri date...</strong>
+                </div>
+                <div class="hero-status-box hero-eid-box" id="hero-eid-status-box" hidden>
+                  <span>Eid Status</span>
+                  <strong id="hero-eid-status">Checking Eid date...</strong>
+                </div>
+              </div>
               <p class="hero-meta-note" id="hero-timezone-note">Last updated in IST</p>
               <div class="mini-timings" id="hero-mini-timings">
                 <div class="mini-loading">Preparing prayer cards...</div>
@@ -97,24 +157,33 @@
         <div class="container">
           <div class="section-heading reveal">
             <span class="eyebrow">Welcome</span>
-            <h2>Modern digital access for the Masjid-E-Bilaal community</h2>
+            <h2>Namaz timings, Jumma Namaz, and community services in Kundwa</h2>
             <p>
-              This public website gives worshippers a reliable way to check salah timings,
-              stay aware of updates, and remain connected with mosque services.
+              This website helps local worshippers check daily namaz timings, stay updated
+              with Jumma Namaz information, and follow important announcements from the masjid.
+            </p>
+            <p>
+              For families searching in Kundwa urf Dilipnagar, Masjid-E-Bilaal serves as a
+              local mosque for prayer, reminders, notices, and community support in a simple
+              and reliable digital format.
+            </p>
+            <p>
+              Visitors can also follow community support updates, approved opportunities,
+              and future masjid donation notices relevant to Kundwa and Dilipnagar.
             </p>
           </div>
           <div class="feature-grid" id="services">
             <article class="feature-card reveal">
-              <h3>Prayer Schedule</h3>
-              <p>Daily Fajr, Zuhr, Asr, Maghrib, Isha, and Jumuah timings update dynamically from Firestore.</p>
+              <h3>Namaz Timing Updates</h3>
+              <p>Daily Fajr, Zuhr, Asr, Maghrib, Isha, and Jumma Namaz timings update dynamically for worshippers in Kundwa and Dilipnagar.</p>
             </article>
             <article class="feature-card reveal delay-1">
-              <h3>Community Notices</h3>
-              <p>Announcements are published by the admin dashboard and displayed newest first for the public.</p>
+              <h3>Masjid Announcements</h3>
+              <p>Community notices, important reminders, and masjid announcements are published by the admin dashboard and shown newest first.</p>
             </article>
             <article class="feature-card reveal delay-2">
-              <h3>Administrative Control</h3>
-              <p>A separate authenticated admin panel keeps prayer data and announcements easy to manage.</p>
+              <h3>Community Services</h3>
+              <p>The platform supports local mosque communication, approved jobs, prayer information, and timely updates for the surrounding community.</p>
             </article>
           </div>
         </div>
@@ -124,8 +193,8 @@
         <div class="container">
           <div class="section-heading reveal">
             <span class="eyebrow">Prayer Timings</span>
-            <h2>Live daily salah schedule</h2>
-            <p>Current and upcoming prayer status updates automatically when the timing document changes in Firestore.</p>
+            <h2>Live namaz timings for Masjid-E-Bilaal Kundwa</h2>
+            <p>Check daily salah timings and upcoming prayer status, including Jumma Namaz timing updates for Kundwa (urf Dilipnagar).</p>
           </div>
 
           <div class="status-banner reveal" id="prayer-status-banner">
@@ -147,8 +216,8 @@
         <div class="container">
           <div class="section-heading reveal">
             <span class="eyebrow">Announcements</span>
-            <h2>Latest community updates</h2>
-            <p>Announcements stream from Firestore in newest-first order with smooth animated entry states.</p>
+            <h2>Latest masjid announcements in Kundwa (urf Dilipnagar)</h2>
+            <p>Read the latest updates, notices, and community announcements from Masjid-E-Bilaal in newest-first order.</p>
           </div>
 
           <div class="loader-card reveal" id="announcement-loader">
@@ -184,6 +253,7 @@
           <p>Green Crescent Road, Community Block</p>
           <p>info@masjidebilaal.org</p>
           <p>+91 98765 43210</p>
+          <a href="https://chat.whatsapp.com/EXAMPLEMASJIDBILAALGROUP" target="_blank" rel="noopener">Join WhatsApp Group</a>
         </div>
       </div>
       <div class="footer-bottom">
