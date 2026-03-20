@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masjid-E-Bilaal | Prayer Timings & Announcements</title>
+  <meta name="description" content="Masjid-E-Bilaal public website with live prayer timings and community announcements powered by Firebase.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="public">
+  <div class="site-shell">
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a class="brand" href="index.html">
+          <span class="brand-mark">MB</span>
+          <div>
+            <strong>Masjid-E-Bilaal</strong>
+            <span>Prayer, Peace, Community</span>
+          </div>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <nav class="site-nav">
+          <a href="#hero" class="active">Home</a>
+          <a href="#prayer-timings">Prayer Timings</a>
+          <a href="#announcements">Announcements</a>
+          <a href="jobs.html">Jobs</a>
+          <a href="#services">Services</a>
+          <a href="admin.html" class="nav-admin-link">Admin</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero-section" id="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy reveal">
+            <span class="eyebrow">Masjid-E-Bilaal</span>
+            <h1>A place of prayer, peace, community, and service</h1>
+            <p>
+              View live prayer timings and the latest mosque announcements, updated
+              directly by the Masjid-E-Bilaal administration through a secure Firebase dashboard.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#prayer-timings">View Timings</a>
+              <a class="btn btn-secondary" href="#announcements">Community Updates</a>
+            </div>
+            <div class="hero-highlights">
+              <article class="stat-card">
+                <strong>Live Prayer Data</strong>
+                <span>Firestore-backed prayer schedule</span>
+              </article>
+              <article class="stat-card">
+                <strong>Realtime Announcements</strong>
+                <span>Updates appear automatically</span>
+              </article>
+              <article class="stat-card">
+                <strong>Responsive Experience</strong>
+                <span>Optimized for mobile, tablet, and desktop</span>
+              </article>
+            </div>
+          </div>
+
+          <aside class="reveal delay-1">
+            <div class="hero-card">
+              <span class="eyebrow">Today at the Masjid</span>
+              <div class="hero-clock-box">
+                <span>Current Time</span>
+                <strong id="hero-live-clock">--:--:--</strong>
+              </div>
+              <h2 id="hero-prayer-title">Loading live timings...</h2>
+              <p id="hero-prayer-copy">Prayer timing data is being fetched from Firebase.</p>
+              <div class="hero-status-strip">
+                <div class="hero-status-box">
+                  <span>Current</span>
+                  <strong id="hero-current-prayer">--</strong>
+                </div>
+                <div class="hero-status-box">
+                  <span>Next</span>
+                  <strong id="hero-next-prayer">--</strong>
+                </div>
+              </div>
+              <p class="hero-meta-note" id="hero-timezone-note">Last updated in IST</p>
+              <div class="mini-timings" id="hero-mini-timings">
+                <div class="mini-loading">Preparing prayer cards...</div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-heading reveal">
+            <span class="eyebrow">Welcome</span>
+            <h2>Modern digital access for the Masjid-E-Bilaal community</h2>
+            <p>
+              This public website gives worshippers a reliable way to check salah timings,
+              stay aware of updates, and remain connected with mosque services.
+            </p>
+          </div>
+          <div class="feature-grid" id="services">
+            <article class="feature-card reveal">
+              <h3>Prayer Schedule</h3>
+              <p>Daily Fajr, Zuhr, Asr, Maghrib, Isha, and Jumuah timings update dynamically from Firestore.</p>
+            </article>
+            <article class="feature-card reveal delay-1">
+              <h3>Community Notices</h3>
+              <p>Announcements are published by the admin dashboard and displayed newest first for the public.</p>
+            </article>
+            <article class="feature-card reveal delay-2">
+              <h3>Administrative Control</h3>
+              <p>A separate authenticated admin panel keeps prayer data and announcements easy to manage.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-tint" id="prayer-timings">
+        <div class="container">
+          <div class="section-heading reveal">
+            <span class="eyebrow">Prayer Timings</span>
+            <h2>Live daily salah schedule</h2>
+            <p>Current and upcoming prayer status updates automatically when the timing document changes in Firestore.</p>
+          </div>
+
+          <div class="status-banner reveal" id="prayer-status-banner">
+            <span class="status-label">Live Status</span>
+            <h2 id="current-prayer-label">Fetching prayer status...</h2>
+            <p id="current-prayer-description">Please wait while prayer timings are loaded.</p>
+          </div>
+
+          <div class="loader-card reveal" id="prayer-loader">
+            <div class="spinner"></div>
+            <p>Loading prayer timings from Firebase...</p>
+          </div>
+
+          <div class="prayer-grid" id="prayer-grid"></div>
+        </div>
+      </section>
+
+      <section class="section" id="announcements">
+        <div class="container">
+          <div class="section-heading reveal">
+            <span class="eyebrow">Announcements</span>
+            <h2>Latest community updates</h2>
+            <p>Announcements stream from Firestore in newest-first order with smooth animated entry states.</p>
+          </div>
+
+          <div class="loader-card reveal" id="announcement-loader">
+            <div class="spinner"></div>
+            <p>Loading announcements from Firebase...</p>
+          </div>
+
+          <div class="announcement-grid large" id="announcement-list"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <h3>Masjid-E-Bilaal</h3>
+          <p>Live prayer timings, official announcements, and a modern digital front door for the mosque community.</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <a href="#prayer-timings">Prayer Timings</a>
+          <a href="#announcements">Announcements</a>
+          <a href="jobs.html">Jobs</a>
+          <a href="#services">Services</a>
+        </div>
+        <div>
+          <h4>Admin</h4>
+          <a href="admin.html">Admin Login</a>
+          <p>Protected dashboard for updates and management.</p>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <p>Green Crescent Road, Community Block</p>
+          <p>info@masjidebilaal.org</p>
+          <p>+91 98765 43210</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="container">
+          <p>&copy; 2026 Masjid-E-Bilaal. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

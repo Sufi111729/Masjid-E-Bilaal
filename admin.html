@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masjid-E-Bilaal | Admin Dashboard</title>
+  <meta name="description" content="Protected admin dashboard for Masjid-E-Bilaal prayer timings and announcements management.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="admin">
+  <div class="site-shell">
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a class="brand" href="index.html">
+          <span class="brand-mark">MB</span>
+          <div>
+            <strong>Masjid-E-Bilaal</strong>
+            <span>Admin Dashboard</span>
+          </div>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <nav class="site-nav">
+          <a href="index.html">Public Site</a>
+          <a href="jobs.html">Jobs</a>
+          <a href="admin.html" class="active">Admin Panel</a>
+        </nav>
+        <button type="button" class="btn btn-outline header-logout" id="header-logout-button" hidden>Logout</button>
+      </div>
+    </header>
+
+    <main class="admin-main">
+      <section class="page-hero compact">
+        <div class="container reveal">
+          <span class="eyebrow">Secure Admin Panel</span>
+          <h1>Manage prayer timings and announcements</h1>
+          <p>Login with Firebase Authentication to publish updates to the public website in realtime.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container admin-layout">
+          <section class="content-card reveal auth-panel" id="auth-panel">
+            <span class="eyebrow">Admin Login</span>
+            <h2>Authorized access only</h2>
+            <form id="login-form" class="styled-form" novalidate>
+              <div class="form-grid">
+                <label>
+                  <span>Email</span>
+                  <input type="email" name="email" value="admin@masjidebilaal.com" placeholder="admin@masjidebilaal.com" required>
+                </label>
+                <label>
+                  <span>Password</span>
+                  <input type="password" name="password" value="Masjid123!" placeholder="Masjid123!" required>
+                </label>
+              </div>
+              <button type="submit" class="btn btn-primary">Login to Dashboard</button>
+              <p id="login-feedback" class="form-feedback" aria-live="polite"></p>
+            </form>
+          </section>
+
+          <section class="admin-dashboard" id="admin-dashboard" hidden>
+            <div class="admin-topbar reveal">
+              <div>
+                <span class="eyebrow">Dashboard</span>
+                <h2>Masjid-E-Bilaal Management</h2>
+                <p id="admin-user-email">Signed in user: --</p>
+              </div>
+              <button type="button" class="btn btn-secondary" id="logout-button">Logout</button>
+            </div>
+
+            <div class="dashboard-grid">
+              <article class="content-card reveal">
+                <span class="eyebrow">Prayer Timing Management</span>
+                <h2>Update daily prayer timings</h2>
+                <form id="prayer-form" class="styled-form" novalidate>
+                  <div class="form-grid admin-prayer-grid">
+                    <label><span>Fajr</span><input type="text" name="fajr" placeholder="5:30 AM" required></label>
+                    <label><span>Zuhr</span><input type="text" name="zuhr" placeholder="1:15 PM" required></label>
+                    <label><span>Asr</span><input type="text" name="asr" placeholder="4:45 PM" required></label>
+                    <label><span>Maghrib</span><input type="text" name="maghrib" placeholder="6:28 PM" required></label>
+                    <label><span>Isha</span><input type="text" name="isha" placeholder="7:45 PM" required></label>
+                    <label><span>Jumuah</span><input type="text" name="jumuah" placeholder="1:30 PM" required></label>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Save Prayer Timings</button>
+                  <p id="prayer-form-feedback" class="form-feedback" aria-live="polite"></p>
+                </form>
+              </article>
+
+              <article class="content-card reveal delay-1">
+                <span class="eyebrow">Announcement Management</span>
+                <h2>Create or edit announcement</h2>
+                <form id="announcement-form" class="styled-form" novalidate>
+                  <input type="hidden" name="announcementId">
+                  <div class="form-grid">
+                    <label class="full">
+                      <span>Title</span>
+                      <input type="text" name="title" placeholder="Jumma Namaz Update" required>
+                    </label>
+                    <label class="full">
+                      <span>Description</span>
+                      <textarea name="description" rows="5" placeholder="Enter announcement details" required></textarea>
+                    </label>
+                  </div>
+                  <div class="button-row">
+                    <button type="submit" class="btn btn-primary" id="announcement-submit-button">Publish Announcement</button>
+                    <button type="button" class="btn btn-outline" id="announcement-reset-button">Reset</button>
+                  </div>
+                  <p id="announcement-form-feedback" class="form-feedback" aria-live="polite"></p>
+                </form>
+              </article>
+            </div>
+
+            <section class="content-card reveal">
+              <span class="eyebrow">Existing Announcements</span>
+              <h2>Review, edit, or delete records</h2>
+              <div class="admin-list" id="admin-announcement-list"></div>
+            </section>
+
+            <section class="content-card reveal">
+              <span class="eyebrow">Jobs Approval</span>
+              <h2>Approve, edit, or remove job submissions</h2>
+              <form id="admin-job-form" class="styled-form" novalidate>
+                <input type="hidden" name="jobId">
+                <div class="form-grid">
+                  <label class="full">
+                    <span>Job Title</span>
+                    <input type="text" name="jobTitle" placeholder="Edit selected job title" required>
+                  </label>
+                  <label class="full">
+                    <span>Description</span>
+                    <textarea name="jobDescription" rows="4" placeholder="Edit selected job description" required></textarea>
+                  </label>
+                </div>
+                <div class="button-row">
+                  <button type="submit" class="btn btn-primary" id="admin-job-submit-button">Update Job</button>
+                  <button type="button" class="btn btn-outline" id="admin-job-reset-button">Reset</button>
+                </div>
+                <p id="admin-job-feedback" class="form-feedback" aria-live="polite"></p>
+              </form>
+
+              <div class="admin-job-columns">
+                <div>
+                  <h3>Pending Approval</h3>
+                  <div class="admin-list" id="admin-job-pending-list"></div>
+                </div>
+                <div>
+                  <h3>Approved Jobs</h3>
+                  <div class="admin-list" id="admin-job-approved-list"></div>
+                </div>
+              </div>
+            </section>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

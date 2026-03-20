@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masjid-E-Bilaal | Jobs</title>
+  <meta name="description" content="Masjid-E-Bilaal jobs and notice board with temporary frontend storage.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="jobs">
+  <div class="site-shell">
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a class="brand" href="index.html">
+          <span class="brand-mark">MB</span>
+          <div>
+            <strong>Masjid-E-Bilaal</strong>
+            <span>Jobs & Notice Board</span>
+          </div>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <nav class="site-nav">
+          <a href="index.html">Home</a>
+          <a href="index.html#prayer-timings">Prayer Timings</a>
+          <a href="index.html#announcements">Announcements</a>
+          <a href="jobs.html" class="active">Jobs</a>
+          <a href="admin.html" class="nav-admin-link">Admin</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero compact">
+        <div class="container reveal">
+          <span class="eyebrow">Jobs</span>
+          <h1>Community jobs and notice board</h1>
+          <p>Submit a job notice for admin approval. Only approved listings are shown publicly and remain visible for 2 days.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container jobs-layout">
+          <article class="content-card reveal">
+            <span class="eyebrow">Post a Job</span>
+            <h2>Submit a job notice</h2>
+            <form id="job-form" class="styled-form" novalidate>
+              <div class="form-grid">
+                <label>
+                  <span>Job Title</span>
+                  <input type="text" name="jobTitle" placeholder="Madrasa Teacher, Caretaker, Office Assistant" required>
+                </label>
+                <label class="full">
+                  <span>Description</span>
+                  <textarea name="jobDescription" rows="4" placeholder="Enter a short job summary" required></textarea>
+                </label>
+                <label class="full">
+                  <span>PDF Notice</span>
+                  <input type="file" name="jobPdf" accept="application/pdf" required>
+                </label>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit For Approval</button>
+              <p id="job-feedback" class="form-feedback" aria-live="polite"></p>
+            </form>
+          </article>
+
+          <aside class="content-card reveal delay-1">
+            <span class="eyebrow">How It Works</span>
+            <h2>Approval based notice board</h2>
+            <p>Public users can submit jobs, but listings only appear after approval from the admin dashboard.</p>
+            <ul class="detail-list">
+              <li>Every submission starts in pending status</li>
+              <li>Admin reviews jobs from the admin panel</li>
+              <li>Only approved notices appear below</li>
+              <li>Each notice remains visible for 2 days</li>
+              <li>Expired approved notices disappear automatically</li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section section-tint">
+        <div class="container">
+          <div class="section-heading reveal">
+            <span class="eyebrow">Active Listings</span>
+            <h2>Approved job notices</h2>
+            <p>Only admin-approved job submissions are shown here.</p>
+          </div>
+          <div class="jobs-grid" id="job-list"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <h3>Masjid-E-Bilaal</h3>
+          <p>Prayer timings, announcements, and community opportunity listings in one place.</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <a href="index.html">Home</a>
+          <a href="index.html#prayer-timings">Prayer Timings</a>
+          <a href="index.html#announcements">Announcements</a>
+          <a href="jobs.html">Jobs</a>
+        </div>
+        <div>
+          <h4>Admin</h4>
+          <a href="admin.html">Admin Panel</a>
+        </div>
+        <div>
+          <h4>Notice Policy</h4>
+          <p>Frontend demo board with automatic 2-day expiry.</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="container">
+          <p>&copy; 2026 Masjid-E-Bilaal. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
